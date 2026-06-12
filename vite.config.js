@@ -9,6 +9,7 @@ import viteCompression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default ({ mode }) => defineConfig({
+    base: '/Homei/' // 仓库名固定写这里，前后必须带 /
     plugins: [
         vue(),
         AutoImport({
