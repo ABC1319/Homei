@@ -9,7 +9,9 @@ import viteCompression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default ({ mode }) => defineConfig({
-    base: '/Homei/' // 仓库名固定写这里，前后必须带 /
+    // 👉 新增这一行，适配 GitHub Pages 子仓库路径
+    base: '/Homei/',
+
     plugins: [
         vue(),
         AutoImport({
@@ -25,13 +27,13 @@ export default ({ mode }) => defineConfig({
                 skipWaiting: true,
                 clientsClaim: true,
                 runtimeCaching: [{
-                    urlPattern: /(.*?)\.(js|css|woff2|woff|ttf)/, // js / css 静态资源缓存
+                    urlPattern: /(.*?)\.(js|css|woff2|woff|ttf)/,
                     handler: 'CacheFirst',
                     options: {
                         cacheName: 'js-css-cache'
                     }
                 }, {
-                    urlPattern: /(.*?)\.(png|jpe?g|svg|gif|bmp|psd|tiff|tga|eps)/, // 图片缓存
+                    urlPattern: /(.*?)\.(png|jpe?g|svg|gif|bmp|psd|tiff|tga|eps)/,
                     handler: 'CacheFirst',
                     options: {
                         cacheName: 'image-cache'
@@ -43,7 +45,8 @@ export default ({ mode }) => defineConfig({
                 short_name: loadEnv(mode, process.cwd()).VITE_SITE_NAME,
                 description: loadEnv(mode, process.cwd()).VITE_SITE_DES,
                 display: "standalone",
-                start_url: "/",
+                // 👉 同步修改 start_url，和 base 保持一致
+                start_url: "/Homei/",
                 theme_color: "#424242",
                 background_color: "#424242",
                 icons: [{
@@ -104,7 +107,6 @@ export default ({ mode }) => defineConfig({
         minify: 'terser',
         terserOptions: {
             compress: {
-                // 生产环境时移除 console
                 pure_funcs: ['console.log']
             }
         }
