@@ -1,0 +1,42 @@
+name: Build & Deploy GitHub Pages
+
+# 触发条件：push 到 main/master 分支时自动执行
+on:
+  push:
+    branches: [ main, master ]
+
+# 权限配置
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 配置 Node.js（根据项目选择版本，推荐 18/20）
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. 项目打包（核心：先打包）
+      - name: Build project
+        run: npm run build
+
+      # 5. 部署 dist 目录到 gh-pages 分支
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist  # 打包产物目录，根据项目修改
